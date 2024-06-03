@@ -11,7 +11,7 @@ async function displayUsers() {
   const users = await fetchData('https://jsonplaceholder.typicode.com/users');
   const content = document.getElementById('content');
   content.innerHTML = `<div class="hero bg-light p-5 rounded mb-4">
-                         <h1 class="display-4">Welcome to Fake Site</h1>
+                         <h1 class="display-4">Welcome to API Fake Site</h1>
                          <p class="lead">Explore user information, beautiful galleries, and learn more about the developer.</p>
                        </div>
                        <h2>Users</h2>`;
