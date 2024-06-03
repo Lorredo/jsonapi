@@ -1,6 +1,6 @@
-document.getElementById('home-tab').addEventListener('click', displayUsers);
-document.getElementById('gallery-tab').addEventListener('click', displayGallery);
-document.getElementById('about-tab').addEventListener('click', displayAbout);
+document.getElementById('home-tab').addEventListener('click', () => navigateTo('home'));
+document.getElementById('gallery-tab').addEventListener('click', () => navigateTo('gallery'));
+document.getElementById('about-tab').addEventListener('click', () => navigateTo('about'));
 
 async function fetchData(url) {
   const response = await fetch(url);
@@ -11,7 +11,7 @@ async function displayUsers() {
   const users = await fetchData('https://jsonplaceholder.typicode.com/users');
   const content = document.getElementById('content');
   content.innerHTML = `<div class="hero bg-light p-5 rounded mb-4">
-                         <h1 class="display-4">Welcome to API Fake Site</h1>
+                         <h1 class="display-4">Welcome to My PWA</h1>
                          <p class="lead">Explore user information, beautiful galleries, and learn more about the developer.</p>
                        </div>
                        <h2>Users</h2>`;
@@ -20,6 +20,7 @@ async function displayUsers() {
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">${user.name}</h5>
+                            <p class="card-text"><strong>Username:</strong> ${user.username}</p>
                             <p class="card-text"><strong>Email:</strong> ${user.email}</p>
                             <p class="card-text"><strong>Address:</strong> ${user.address.street}, ${user.address.city}</p>
                             <p class="card-text"><strong>Phone:</strong> ${user.phone}</p>
@@ -70,5 +71,38 @@ function displayAbout() {
     </div>`;
 }
 
-// Load Home content on page load
-document.addEventListener('DOMContentLoaded', displayUsers);
+function setActiveTab(tab) {
+  const tabs = ['home', 'gallery', 'about'];
+  tabs.forEach(t => {
+    const element = document.getElementById(`${t}-tab`);
+    if (t === tab) {
+      element.classList.add('active');
+    } else {
+      element.classList.remove('active');
+    }
+  });
+}
+
+function navigateTo(tab) {
+  localStorage.setItem('currentTab', tab);
+  setActiveTab(tab);
+  switch (tab) {
+    case 'home':
+      displayUsers();
+      break;
+    case 'gallery':
+      displayGallery();
+      break;
+    case 'about':
+      displayAbout();
+      break;
+    default:
+      displayUsers();
+  }
+}
+
+// Load the correct tab based on localStorage
+document.addEventListener('DOMContentLoaded', () => {
+  const currentTab = localStorage.getItem('currentTab') || 'home';
+  navigateTo(currentTab);
+});
